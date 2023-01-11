@@ -1,5 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
+import { Product } from 'src/products/entities/product.entity';
 import { Repository } from 'typeorm';
 import { CreateOrderDto } from './dto/create-order.dto';
 import { UpdateOrderDto } from './dto/update-order.dto';
@@ -13,23 +14,34 @@ export class OrdersService {
     ){}
 
   create(createOrderDto: CreateOrderDto) {
+    const {items, userId} = createOrderDto;
+
     let subTotal = 0
-
-    for (let index in createOrderDto.cartProduct) {
-      subTotal += createOrderDto.cartProduct[index].quantity * createOrderDto.cartProduct[index].price 
+    for (let index in items) {
+      subTotal += items[index].quantity * items[index].price 
     }
-    
-    createOrderDto["subTotal"] = subTotal
 
-    return this.orderRepository.save(createOrderDto);
+    // createOrderDto["subTotal"] = subTotal
+
+    let order = new Order()
+
+    order.subTotal = subTotal;
+    order.items = items;
+    order.userId = userId;
+
+    return this.orderRepository.save(order);
   }
 
   findAll() {
-    return `This action returns all orders`;
+    return this.orderRepository.find();
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} order`;
+  findOne(orderId: number) {
+    return this.orderRepository.findOneBy({ orderId: orderId });
+  }
+
+  findUser(userId: number) {
+    return this.orderRepository.findBy({ userId: userId });
   }
 
   update(id: number, updateOrderDto: UpdateOrderDto) {
