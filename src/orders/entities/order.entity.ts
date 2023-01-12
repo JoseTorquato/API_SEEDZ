@@ -13,9 +13,10 @@ export class Order {
     @Column()
     subTotal: number;
 
-    // @OneToMany(type => User, user => user.id, {eager: true})
-    // user: User[];
-
     @Column()
     userId: number;
+
+    @Column()
+    name: string;
 }
+

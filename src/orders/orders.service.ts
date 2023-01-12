@@ -1,6 +1,8 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Product } from 'src/products/entities/product.entity';
+import { User } from 'src/users/entities/user.entity';
+import { UsersService } from 'src/users/users.service';
 import { Repository } from 'typeorm';
 import { CreateOrderDto } from './dto/create-order.dto';
 import { UpdateOrderDto } from './dto/update-order.dto';
@@ -10,26 +12,63 @@ import { Order } from './entities/order.entity';
 export class OrdersService {
   constructor(
     @InjectRepository(Order)
-      private orderRepository: Repository<Order>
+      private orderRepository: Repository<Order>,
+
+    @InjectRepository(Product)
+      private productRepository: Repository<Product>,
+
+    @InjectRepository(User)
+      private userRepository: Repository<User>
     ){}
 
-  create(createOrderDto: CreateOrderDto) {
+  async create(createOrderDto: CreateOrderDto) {
     const {items, userId} = createOrderDto;
-
+    let user = await this.userRepository.findOneBy({ id: userId })
+    
     let subTotal = 0
+    
     for (let index in items) {
-      subTotal += items[index].quantity * items[index].price 
-    }
+      let productId = items[index].id
+      let quantity = items[index].quantity
 
-    // createOrderDto["subTotal"] = subTotal
+      let product = await this.productRepository.findOneBy({ id: productId })
+      
+      if (!product){
+        return `Produto com ID: ${productId} não existe.`
+      }
+      
+      if (quantity > product.stock){
+        return `Produto com ID: ${productId} sem Stock.`
+      } 
+
+      items[index].name = product.name
+      items[index].price = product.price
+      
+      subTotal += quantity * product.price 
+    }
 
     let order = new Order()
 
     order.subTotal = subTotal;
     order.items = items;
     order.userId = userId;
+    order.name = user.name;
 
-    return this.orderRepository.save(order);
+    let response = await this.orderRepository.save(order);
+
+    for (let index in items) {
+      let productId = items[index].id
+      let quantity = items[index].quantity
+
+      let product = await this.productRepository.findOneBy({ id: productId })
+      
+      product.stock = product.stock - quantity
+
+      await this.productRepository.update(productId, product)
+
+    }
+
+    return response
   }
 
   findAll() {

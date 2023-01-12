@@ -1,5 +1,5 @@
 import {IsNotEmpty} from 'class-validator';
-import { Product } from 'src/products/entities/product.entity';
+import { User } from 'src/users/entities/user.entity';
 
 export class CreateOrderDto {
     @IsNotEmpty()
@@ -10,4 +10,7 @@ export class CreateOrderDto {
 
     @IsNotEmpty()
     userId: number;
+
+    @IsNotEmpty()
+    name: string;
 }

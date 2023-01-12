@@ -30,7 +30,7 @@ import {
           { email: payload.email },
           {
             secret: 'topSecret512',
-            expiresIn: '50s',
+            expiresIn: '600s',
           },
         ),
       };
