@@ -40,6 +40,10 @@ $ npm run test
 $ npm run test:cov
 ```
 
+## Documentação
+```bash
+localhost:3000/api
+```
 
 ## Primeiros passos
 ```bash
@@ -60,35 +64,6 @@ POST - localhost:3000/users
     "password": "password"
     "id": 1
 }
-```
-
-## Rotas    
-```bash
-
-# Login
-POST/auth/login
-
-# Usuário
-GET/users
-GET/users/id
-POST/users 
-PATCH/users 
-DELETE/users
-
-# Ordens de compra
-GET/orders
-GET/orders/id
-GET/orders/user/id
-POST/orders 
-PATCH/orders 
-DELETE/orders
-
-# Produtos
-GET/products
-GET/products/id
-POST/products 
-PATCH/products 
-DELETE/products 
 ```
 
 
