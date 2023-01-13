@@ -18,5 +18,13 @@ export class Order {
 
     @Column()
     name: string;
+
+    constructor(order?: Partial<Order>) {
+        this.orderId = order?.orderId;
+        this.items = order?.items;
+        this.subTotal = order?.subTotal;
+        this.userId = order?.userId;
+        this.name = order?.name;
+    }
 }
 
