@@ -13,4 +13,11 @@ export class Product {
 
     @Column()
     price: number;
+
+    constructor(product: Partial<Product>){
+        this.id = product?.id;
+        this.name = product?.name;
+        this.stock = product?.stock;
+        this.price = product?.price;
+    }
 }

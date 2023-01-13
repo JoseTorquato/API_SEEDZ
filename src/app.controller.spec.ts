@@ -15,8 +15,8 @@ describe('AppController', () => {
   });
 
   describe('root', () => {
-    it('should return "Hello World!"', () => {
-      expect(appController.getHello()).toBe('Hello World!');
+    it('should return "Seja bem vindo ao meu teste de Node + Typescript para a SEEDZ <3"', () => {
+      expect(appController.getHello()).toBe('Seja bem vindo ao meu teste de Node + Typescript para a SEEDZ <3');
     });
   });
 });
